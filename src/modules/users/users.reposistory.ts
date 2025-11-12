@@ -2,12 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma, User } from 'generated/prisma';
+import { User, Prisma } from 'generated/prisma';
 import { paginate } from 'src/common/utils/paginator.util';
-import {
-  ApiResponse,
-  ApiResponseDto,
-} from 'src/common/utils/api-response.util';
+import { ApiResponse, ApiResponseDto } from 'src/common/utils/api-response.util';
 
 @Injectable()
 export class UsersReposistory {
