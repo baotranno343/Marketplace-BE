@@ -3,8 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { User, Prisma } from 'generated/prisma';
-import { paginate } from 'src/common/utils/paginator.util';
-import { ApiResponse, ApiResponseDto } from 'src/common/utils/api-response.util';
+import { ApiResponse } from 'src/common/utils/api-response.util';
+import { apiPaginate } from 'src/common/utils/paginator.util';
 
 @Injectable()
 export class UsersReposistory {
@@ -24,7 +24,7 @@ export class UsersReposistory {
     page?: number;
     perPage?: number;
   }): Promise<any> {
-    return paginate(
+    return apiPaginate(
       this.prisma.user,
       {
         where,
@@ -37,9 +37,9 @@ export class UsersReposistory {
     );
   }
 
-  async findOne(id: number): Promise<ApiResponse<User>> {
+  async findOne(id: number) {
     const user = await this.prisma.user.findUnique({ where: { id } });
-    return ApiResponseDto.ok(user);
+    return ApiResponse.ok(user);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

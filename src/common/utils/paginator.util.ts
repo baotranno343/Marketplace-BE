@@ -1,6 +1,6 @@
 // pagination.util.ts
 
-import { ApiResponseDto } from './api-response.util';
+import { ApiResponse } from './api-response.util';
 
 export interface PaginationMeta {
   total: number;
@@ -21,7 +21,7 @@ export type PaginateFunction = <T, K>(
   model: any,
   args?: K,
   options?: PaginateOptions,
-) => Promise<ApiResponseDto<T[], PaginationMeta>>;
+) => Promise<ApiResponse<T[], PaginationMeta>>;
 
 export const paginator = (defaultOptions: PaginateOptions): PaginateFunction => {
   return async (model, args: any = {}, options?: PaginateOptions) => {
@@ -52,12 +52,12 @@ export const paginator = (defaultOptions: PaginateOptions): PaginateFunction => 
     };
 
     // 🔥 trả luôn ApiResponseDto ở đây
-    return ApiResponseDto.ok(data, meta);
+    return ApiResponse.ok(data, meta);
   };
 };
 
 // instance dùng chung cho toàn project
-export const paginate: PaginateFunction = paginator({
+export const apiPaginate: PaginateFunction = paginator({
   page: 1,
   perPage: 10,
 });

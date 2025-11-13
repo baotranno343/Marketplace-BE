@@ -5,14 +5,14 @@ export interface ApiError {
   details?: any;
 }
 
-export interface ApiResponse<T, M = any> {
+export interface ApiResponseBuilder<T, M = any> {
   success: boolean;
   data: T | null;
   meta?: M | null;
   error?: ApiError | null;
 }
 
-export class ApiResponseDto<T, M = any> implements ApiResponse<T, M> {
+export class ApiResponse<T, M = any> implements ApiResponseBuilder<T, M> {
   success: boolean;
   data: T | null;
   meta: M | null;
@@ -31,11 +31,11 @@ export class ApiResponseDto<T, M = any> implements ApiResponse<T, M> {
   }
 
   static ok<T, M = any>(data: T, meta: M | null = null) {
-    return new ApiResponseDto<T, M>(true, data, meta, null);
+    return new ApiResponse<T, M>(true, data, meta, null);
   }
 
   static fail<T = null, M = any>(code: string, message: string, details?: any) {
-    return new ApiResponseDto<T, M>(false, null, null, {
+    return new ApiResponse<T, M>(false, null, null, {
       code,
       message,
       details,
