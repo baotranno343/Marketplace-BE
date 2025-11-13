@@ -23,13 +23,10 @@ export type PaginateFunction = <T, K>(
   options?: PaginateOptions,
 ) => Promise<ApiResponseDto<T[], PaginationMeta>>;
 
-export const paginator = (
-  defaultOptions: PaginateOptions,
-): PaginateFunction => {
+export const paginator = (defaultOptions: PaginateOptions): PaginateFunction => {
   return async (model, args: any = {}, options?: PaginateOptions) => {
     const page = Number(options?.page ?? defaultOptions.page ?? 1) || 1;
-    const perPage =
-      Number(options?.perPage ?? defaultOptions.perPage ?? 10) || 10;
+    const perPage = Number(options?.perPage ?? defaultOptions.perPage ?? 10) || 10;
 
     const skip = page > 0 ? perPage * (page - 1) : 0;
     const where = args?.where;

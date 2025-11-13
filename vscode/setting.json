@@ -1,0 +1,8 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "files.eol": "\n",
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
+  "prettier.endOfLine": "lf"
+}
