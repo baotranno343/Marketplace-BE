@@ -1,70 +1,27 @@
-// @ts-check
-import eslint from '@eslint/js';
+import js from '@eslint/js';
+import prettierConfig from 'eslint-config-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
 import tseslint from 'typescript-eslint';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
 
-export default tseslint.config(
-  // 1️⃣ Bỏ qua file config ESLint chính
+export default [
   {
-    ignores: [
-      'node_modules',
-      'dist',
-      'build',
-      '.next',
-      'coverage',
-      'eslint.config.mjs',
-    ],
+    ignores: ['dist/**', 'node_modules/**'],
   },
 
-  // 2️⃣ Base ESLint + TS recommended
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  prettierConfig,
 
-  // 3️⃣ Prettier plugin tích hợp ESLint
-  prettierRecommended,
-
-  // 4️⃣ Ngôn ngữ + môi trường
   {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      parserOptions: {
-        projectService: true, // cần nếu dùng tsconfig.json
-        tsconfigRootDir: import.meta.dirname,
-      },
-      sourceType: 'module',
+    plugins: {
+      prettier: prettierPlugin,
     },
-  },
-
-  // 5️⃣ Các rule tùy chỉnh (đã fix cho macOS)
-  {
     rules: {
-      // Prettier
-      'prettier/prettier': [
-        'error',
-        {
-          singleQuote: true,
-          semi: true,
-          trailingComma: 'all',
-          endOfLine: 'lf', // 👈 ép dùng LF để không lỗi CRLF trên macOS
-          printWidth: 100,
-        },
-      ],
-
-      // TypeScript
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        { argsIgnorePattern: '^_' },
-      ],
-
-      // General
+      'prettier/prettier': 'error',
+      'no-unused-vars': 'warn',
       'no-console': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
-);
+];

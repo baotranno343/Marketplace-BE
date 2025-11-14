@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ApiResponse } from 'src/common/utils/api-response.util';
+import { apiPaginate } from 'src/common/utils/paginator.util';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsRepository } from './products.repository';
-import { ApiResponse } from 'src/common/utils/api-response.util';
-import { apiPaginate } from 'src/common/utils/paginator.util';
 
 @Injectable()
 export class ProductsService {
