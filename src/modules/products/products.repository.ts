@@ -27,25 +27,25 @@ export class ProductsRepository {
     return apiPaginate(this.prismaService.product, { where, orderBy }, { page, perPage });
   }
 
-  findOne(id: number) {
+  findOne(id: string): Promise<Product | null> {
     return this.prismaService.product.findUnique({
       where: { id },
     });
   }
 
-  update(id: number, data: Prisma.ProductUpdateInput) {
+  update(id: string, data: Prisma.ProductUpdateInput): Promise<Product> {
     return this.prismaService.product.update({
       where: { id },
       data: data,
     });
   }
-  softDelete(id: number) {
+  softDelete(id: string): Promise<Product> {
     return this.prismaService.product.update({
       where: { id },
       data: { deletedAt: new Date() },
     });
   }
-  remove(id: number) {
+  remove(id: string): Promise<Product> {
     return this.prismaService.product.delete({
       where: { id },
     });

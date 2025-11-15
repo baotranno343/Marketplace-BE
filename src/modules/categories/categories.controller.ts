@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { Category } from 'generated/prisma';
+import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
+import { PaginatedResult } from 'src/common/utils/paginator.util';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -8,27 +21,33 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
+  createCategory(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
     return this.categoriesService.createCategory(createCategoryDto);
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findCategories();
+  findCategoriesPagination(@Query() query: PaginateOptionsDTO): Promise<PaginatedResult<Category>> {
+    return this.categoriesService.findCategories({ page: query.page, perPage: query.perPage });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findCategory(+id);
+  findCategory(@Param('id', ParseIntPipe) id: string): Promise<Category | null> {
+    return this.categoriesService.findCategory(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.updateCategory(+id, updateCategoryDto);
+  updateCategory(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ): Promise<Category> {
+    return this.categoriesService.updateCategory(id, updateCategoryDto);
   }
-
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.removeCategory(+id);
+  softDeleteCategory(@Param('id', ParseIntPipe) id: string): Promise<Category> {
+    return this.categoriesService.softDeleteCategory(id);
+  }
+  @Delete(':id/hard')
+  removeCategory(@Param('id', ParseIntPipe) id: string): Promise<Category> {
+    return this.categoriesService.removeCategory(id);
   }
 }

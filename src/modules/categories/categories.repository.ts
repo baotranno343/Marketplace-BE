@@ -1,32 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { Category, Prisma } from 'generated/prisma';
+import { apiPaginate, PaginatedResult } from 'src/common/utils/paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoriesRepository {
   constructor(private prismaService: PrismaService) {}
 
-  create(CreateCategoryDto: CreateCategoryDto) {
-    return this.prismaService.category.create({ data: CreateCategoryDto });
+  create(data: Prisma.CategoryCreateInput): Promise<Category> {
+    return this.prismaService.category.create({ data });
   }
 
-  findAll() {
-    return this.prismaService.category.findMany();
+  async findAll({
+    where,
+    orderBy,
+    page,
+    perPage,
+  }: {
+    where?: Prisma.CategoryWhereInput;
+    orderBy?: Prisma.CategoryOrderByWithRelationInput;
+    page?: number | string | undefined;
+    perPage?: number | string | undefined;
+  }): Promise<PaginatedResult<Category>> {
+    return apiPaginate(this.prismaService.category, { where, orderBy }, { page, perPage });
   }
 
-  findOne(id: number) {
+  findOne(id: string): Promise<Category | null> {
     return this.prismaService.category.findUnique({ where: { id } });
   }
 
-  update(id: number, data: UpdateCategoryDto) {
+  update(id: string, data: Prisma.CategoryUpdateInput): Promise<Category> {
     return this.prismaService.category.update({
       where: { id },
       data,
     });
   }
-
-  remove(id: number) {
+  softDelete(id: string): Promise<Category> {
+    return this.prismaService.category.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+  }
+  remove(id: string): Promise<Category> {
     return this.prismaService.category.delete({ where: { id } });
   }
 }

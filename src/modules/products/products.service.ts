@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from 'generated/prisma';
 import { PaginatedResult } from 'src/common/utils/paginator.util';
-import { ProductPaginateOptionsDTO } from '../users/dto/product-paginate-options.dto';
+import { PaginateOptionsDTO } from '../../common/dto/paginate-options.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { mapCreateProductDtoToPrisma, mapUpdateProductDtoToPrisma } from './mapper/product.mapper';
@@ -15,29 +15,27 @@ export class ProductsService {
     return await this.productsRepository.create(data);
   }
 
-  async findProducts(
-    productPaginateOptionsDTO: ProductPaginateOptionsDTO,
+  findProductsPagination(
+    paginateOptionsDTO: PaginateOptionsDTO,
   ): Promise<PaginatedResult<Product>> {
-    const products = await this.productsRepository.findAll({
-      page: productPaginateOptionsDTO.page,
-      perPage: productPaginateOptionsDTO.perPage,
+    return this.productsRepository.findAll({
+      page: paginateOptionsDTO.page,
+      perPage: paginateOptionsDTO.perPage,
     });
-    return products;
   }
 
-  findProduct(id: number) {
-    const product = this.productsRepository.findOne(id);
-    return product;
+  findProduct(id: string): Promise<Product | null> {
+    return this.productsRepository.findOne(id);
   }
 
-  async updateProduct(id: number, updateProductDto: UpdateProductDto) {
+  async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
     const data = mapUpdateProductDtoToPrisma(updateProductDto);
-    const product = await this.productsRepository.update(id, data);
-    return product;
+    return await this.productsRepository.update(id, data);
   }
-
-  async removeProduct(id: number) {
-    const product = await this.productsRepository.remove(id);
-    return product;
+  async softDeleteProduct(id: string): Promise<Product> {
+    return await this.productsRepository.softDelete(id);
+  }
+  async removeProduct(id: string): Promise<Product> {
+    return await this.productsRepository.remove(id);
   }
 }

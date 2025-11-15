@@ -1,36 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { ApiResponse } from 'src/common/utils/api-response.util';
-import { apiPaginate } from 'src/common/utils/paginator.util';
+import { Category } from 'generated/prisma';
+import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
+import { PaginatedResult } from 'src/common/utils/paginator.util';
 import { CategoriesRepository } from './categories.repository';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import {
+  mapCreateCategoryDtoToPrisma,
+  mapUpdateCategoryDtoToPrisma,
+} from './mapper/category.mapper';
 
 @Injectable()
 export class CategoriesService {
   constructor(private categoriesRepository: CategoriesRepository) {}
 
-  async createCategory(createCategoryDto: CreateCategoryDto) {
-    await this.categoriesRepository.create(createCategoryDto);
-    return ApiResponse.ok(null, null);
+  createCategory(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    const data = mapCreateCategoryDtoToPrisma(createCategoryDto);
+    return this.categoriesRepository.create(data);
   }
 
-  findCategories() {
-    const categories = this.categoriesRepository.findAll();
-    return apiPaginate(categories);
+  findCategories(paginateOptionsDTO: PaginateOptionsDTO): Promise<PaginatedResult<Category>> {
+    return this.categoriesRepository.findAll({
+      page: paginateOptionsDTO.page,
+      perPage: paginateOptionsDTO.perPage,
+    });
   }
 
-  findCategory(id: number) {
-    const category = this.categoriesRepository.findOne(id);
-    return ApiResponse.ok(category, null);
+  findCategory(id: string): Promise<Category | null> {
+    return this.categoriesRepository.findOne(id);
   }
 
-  async updateCategory(id: number, updateCategoryDto: UpdateCategoryDto) {
-    await this.categoriesRepository.update(id, updateCategoryDto);
-    return ApiResponse.ok(null, null);
+  async updateCategory(id: string, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+    const data = mapUpdateCategoryDtoToPrisma(updateCategoryDto);
+    return this.categoriesRepository.update(id, data);
   }
-
-  async removeCategory(id: number) {
-    await this.categoriesRepository.remove(id);
-    return ApiResponse.ok(null, null);
+  async softDeleteCategory(id: string): Promise<Category> {
+    return await this.categoriesRepository.softDelete(id);
+  }
+  async removeCategory(id: string): Promise<Category> {
+    return await this.categoriesRepository.remove(id);
   }
 }

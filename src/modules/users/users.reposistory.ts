@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'generated/prisma';
+import { Prisma, User } from 'generated/prisma';
 import { ApiResponse } from 'src/common/utils/api-response.util';
 import { apiPaginate } from 'src/common/utils/paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
@@ -37,7 +37,7 @@ export class UsersReposistory {
     );
   }
 
-  async findOne(id: number): Promise<ApiResponse<any>> {
+  async findOne(id: string): Promise<ApiResponse<User | null>> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     return ApiResponse.ok(user, null);
   }

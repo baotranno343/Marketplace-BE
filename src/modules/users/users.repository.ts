@@ -37,7 +37,7 @@ export class UsersReposistory {
     );
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     return ApiResponse.ok(user);
   }

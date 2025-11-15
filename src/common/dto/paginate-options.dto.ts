@@ -2,7 +2,7 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Max, Min } from 'class-validator';
 
-export class ProductPaginateOptionsDTO {
+export class PaginateOptionsDTO {
   @IsOptional()
   @Type(() => Number) // chuyển '2' -> 2
   @IsInt()

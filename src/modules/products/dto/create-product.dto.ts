@@ -13,7 +13,7 @@ export class CreateProductDto {
   @IsNumber()
   discount: number;
   @IsNumber()
-  CategoryId: number;
+  CategoryId: string;
   @IsNumber()
   stock: number;
   @IsEnum(ProductStatus)
@@ -31,5 +31,5 @@ export class CreateProductDto {
   @IsDate()
   deletedAt: Date;
   @IsNumber()
-  userId: number;
+  userId: string;
 }

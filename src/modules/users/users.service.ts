@@ -9,11 +9,11 @@ export class UsersService {
     return 'This action adds a new user';
   }
 
-  getUsers(): any {
+  getUsers(): Promise<any> {
     return this.usersReposistory.findAll({});
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.usersReposistory.findOne(id);
   }
 
