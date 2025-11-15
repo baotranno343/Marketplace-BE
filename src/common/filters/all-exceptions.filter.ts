@@ -1,6 +1,7 @@
 // src/common/filters/all-exceptions.filter.ts
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Prisma } from 'generated/prisma';
 import { ApiResponse } from '../utils/api-response.util';
 // (tuỳ chọn) nếu dùng Zod hoặc Prisma thì import thêm:
 // import { ZodError } from 'zod';
@@ -78,33 +79,34 @@ export class AllExceptionsFilter implements ExceptionFilter {
     //   };
     // }
     // 3) (tuỳ chọn) Nếu muốn xử lý riêng Prisma error
-    // else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
-    //   status = HttpStatus.BAD_REQUEST;
-    //   body = {
-    //     success: false,
-    //     data: null,
-    //     meta: null,
-    //     error: {
-    //       code: exception.code,
-    //       message: 'Database error',
-    //       details: exception.meta,
-    //     },
-    //   };
-    // }
+    else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+      status = HttpStatus.BAD_REQUEST;
+      // body = {
+      //   success: false,
+      //   data: null,
+      //   meta: null,
+      //   error: {
+      //     code: exception.code,
+      //     message: 'Database error',
+      //     details: exception.meta,
+      //   },
+      // };
+      body = ApiResponse.error(exception.code, 'Database error', exception.meta);
+    }
     // 4) Các lỗi còn lại
     else {
-      console.error(exception);
       status = HttpStatus.INTERNAL_SERVER_ERROR;
-      body = {
-        success: false,
-        data: null,
-        meta: null,
-        error: {
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Internal server error',
-          details: null,
-        },
-      };
+      // body = {
+      //   success: false,
+      //   data: null,
+      //   meta: null,
+      //   error: {
+      //     code: 'INTERNAL_SERVER_ERROR',
+      //     message: 'Internal server error',
+      //     details: null,
+      //   },
+      // };
+      body = ApiResponse.error('INTERNAL_SERVER_ERROR', 'Internal server error', null);
     }
 
     response.status(status).json(body);
