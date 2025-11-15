@@ -72,7 +72,7 @@ export const paginator = (defaultOptions: PaginateOptions): PaginateFunction => 
 };
 
 // instance dùng chung cho toàn project
-export const apiPaginate: PaginateFunction = paginator({
+export const dataPaginate: PaginateFunction = paginator({
   page: 1,
   perPage: 10,
 });

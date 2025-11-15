@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Category, Prisma } from 'generated/prisma';
-import { apiPaginate, PaginatedResult } from 'src/common/utils/paginator.util';
+import { dataPaginate, PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class CategoriesRepository {
     page?: number | string | undefined;
     perPage?: number | string | undefined;
   }): Promise<PaginatedResult<Category>> {
-    return apiPaginate(this.prismaService.category, { where, orderBy }, { page, perPage });
+    return dataPaginate(this.prismaService.category, { where, orderBy }, { page, perPage });
   }
 
   findOne(id: string): Promise<Category | null> {

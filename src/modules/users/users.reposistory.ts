@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from 'generated/prisma';
 import { ApiResponse } from 'src/common/utils/api-response.util';
-import { apiPaginate } from 'src/common/utils/paginator.util';
+import { dataPaginate } from 'src/common/utils/data-paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -24,7 +24,7 @@ export class UsersReposistory {
     page?: number;
     perPage?: number;
   }): Promise<any> {
-    return apiPaginate(
+    return dataPaginate(
       this.prisma.user,
       {
         where,

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Category } from 'generated/prisma';
 import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
-import { PaginatedResult } from 'src/common/utils/paginator.util';
+import { PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
