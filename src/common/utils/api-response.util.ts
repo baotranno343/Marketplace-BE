@@ -30,7 +30,7 @@ export class ApiResponse<T, M = any> implements ApiResponseBuilder<T, M> {
     this.error = error;
   }
 
-  static ok<T, M = any>(data: T, meta: M | null = null) {
+  static ok<T, M = any>(data: T | null = null, meta: M | null = null) {
     return new ApiResponse<T, M>(true, data, meta, null);
   }
 

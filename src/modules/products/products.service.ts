@@ -8,9 +8,9 @@ import { ProductsRepository } from './products.repository';
 @Injectable()
 export class ProductsService {
   constructor(private productsRepository: ProductsRepository) {}
-  async createProduct(createProductDto: CreateProductDto) {
+  async createProduct(createProductDto: CreateProductDto): Promise<ApiResponse<null, null>> {
     await this.productsRepository.create(createProductDto);
-    return ApiResponse.ok(null, null);
+    return ApiResponse.ok();
   }
 
   findProducts() {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from 'generated/prisma';
-import { ApiResponse, ApiResponseDto } from 'src/common/utils/api-response.util';
-import { paginate } from 'src/common/utils/paginator.util';
+import { ApiResponse } from 'src/common/utils/api-response.util';
+import { apiPaginate } from 'src/common/utils/paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -24,7 +24,7 @@ export class UsersReposistory {
     page?: number;
     perPage?: number;
   }): Promise<any> {
-    return paginate(
+    return apiPaginate(
       this.prisma.user,
       {
         where,
@@ -37,9 +37,9 @@ export class UsersReposistory {
     );
   }
 
-  async findOne(id: number): Promise<ApiResponse<User>> {
+  async findOne(id: number): Promise<ApiResponse<any>> {
     const user = await this.prisma.user.findUnique({ where: { id } });
-    return ApiResponseDto.ok(user);
+    return ApiResponse.ok(user, null);
   }
 
   update(id: number, _updateUserDto: UpdateUserDto) {
