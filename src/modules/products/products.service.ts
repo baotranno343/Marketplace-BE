@@ -1,35 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { ApiResponse } from 'src/common/utils/api-response.util';
-import { apiPaginate } from 'src/common/utils/paginator.util';
+import { Product } from 'generated/prisma';
+import { PaginatedResult } from 'src/common/utils/paginator.util';
+import { ProductPaginateOptionsDTO } from '../users/dto/product-paginate-options.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { mapCreateProductDtoToPrisma, mapUpdateProductDtoToPrisma } from './mapper/product.mapper';
 import { ProductsRepository } from './products.repository';
 
 @Injectable()
 export class ProductsService {
   constructor(private productsRepository: ProductsRepository) {}
-  async createProduct(createProductDto: CreateProductDto): Promise<ApiResponse<null, null>> {
-    await this.productsRepository.create(createProductDto);
-    return ApiResponse.ok();
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    const data = mapCreateProductDtoToPrisma(createProductDto);
+    return await this.productsRepository.create(data);
   }
 
-  findProducts() {
-    const products = this.productsRepository.findAll();
-    return apiPaginate(products);
+  async findProducts(
+    productPaginateOptionsDTO: ProductPaginateOptionsDTO,
+  ): Promise<PaginatedResult<Product>> {
+    const products = await this.productsRepository.findAll({
+      page: productPaginateOptionsDTO.page,
+      perPage: productPaginateOptionsDTO.perPage,
+    });
+    return products;
   }
 
   findProduct(id: number) {
     const product = this.productsRepository.findOne(id);
-    return ApiResponse.ok(product, null);
+    return product;
   }
 
   async updateProduct(id: number, updateProductDto: UpdateProductDto) {
-    await this.productsRepository.update(id, updateProductDto);
-    return ApiResponse.ok(null, null);
+    const data = mapUpdateProductDtoToPrisma(updateProductDto);
+    const product = await this.productsRepository.update(id, data);
+    return product;
   }
 
   async removeProduct(id: number) {
-    await this.productsRepository.remove(id);
-    return ApiResponse.ok(null, null);
+    const product = await this.productsRepository.remove(id);
+    return product;
   }
 }

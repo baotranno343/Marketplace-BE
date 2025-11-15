@@ -1,8 +1,7 @@
-import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsNumber, IsString } from 'class-validator';
+import { ProductStatus } from 'generated/prisma';
 
 export class CreateProductDto {
-  @IsNumber()
-  id: number;
   @IsString()
   name: string;
   @IsString()
@@ -17,8 +16,8 @@ export class CreateProductDto {
   CategoryId: number;
   @IsNumber()
   stock: number;
-  //   @IsString()
-  //   status: string;
+  @IsEnum(ProductStatus)
+  status: ProductStatus;
   @IsBoolean()
   isFeatured: boolean;
   @IsNumber()

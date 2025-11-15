@@ -1,19 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './../prisma/prisma.service';
-import { UpdateProductDto } from './dto/update-product.dto';
 import { Prisma } from 'generated/prisma';
+import { apiPaginate, PaginatedResult } from 'src/common/utils/paginator.util';
+import { Product } from './../../../generated/prisma/index.d';
+import { PrismaService } from './../prisma/prisma.service';
 
 @Injectable()
 export class ProductsRepository {
   constructor(private prismaService: PrismaService) {}
-  create(product: Prisma.ProductCreateInput) {
+  create(data: Prisma.ProductCreateInput): Promise<Product> {
     return this.prismaService.product.create({
-      data: product,
+      data: data,
     });
   }
 
-  findAll() {
-    return this.prismaService.product.findMany();
+  async findAll({
+    where,
+    orderBy,
+    page,
+    perPage,
+  }: {
+    where?: Prisma.ProductWhereInput;
+    orderBy?: Prisma.ProductOrderByWithRelationInput;
+    page?: number | string | undefined;
+    perPage?: number | string | undefined;
+  }): Promise<PaginatedResult<Product>> {
+    return apiPaginate(this.prismaService.product, { where, orderBy }, { page, perPage });
   }
 
   findOne(id: number) {
@@ -22,10 +33,10 @@ export class ProductsRepository {
     });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  update(id: number, data: Prisma.ProductUpdateInput) {
     return this.prismaService.product.update({
       where: { id },
-      data: updateProductDto,
+      data: data,
     });
   }
   softDelete(id: number) {

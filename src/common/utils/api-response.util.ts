@@ -34,7 +34,7 @@ export class ApiResponse<T, M = any> implements ApiResponseBuilder<T, M> {
     return new ApiResponse<T, M>(true, data, meta, null);
   }
 
-  static fail<T = null, M = any>(code: string, message: string, details?: any) {
+  static error<T = null, M = any>(code: string, message: string, details?: any) {
     return new ApiResponse<T, M>(false, null, null, {
       code,
       message,

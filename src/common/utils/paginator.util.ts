@@ -1,14 +1,26 @@
 // pagination.util.ts
-
-import { ApiResponse } from './api-response.util';
-
+export interface PaginatedResult<T> {
+  data: T[];
+  meta: {
+    pagination: {
+      total: number;
+      lastPage: number;
+      currentPage: number;
+      perPage: number;
+      prev: number | null;
+      next: number | null;
+    };
+  };
+}
 export interface PaginationMeta {
-  total: number;
-  lastPage: number;
-  currentPage: number;
-  perPage: number;
-  prev: number | null;
-  next: number | null;
+  pagination: {
+    total: number;
+    lastPage: number;
+    currentPage: number;
+    perPage: number;
+    prev: number | null;
+    next: number | null;
+  };
 }
 
 export type PaginateOptions = {
@@ -21,7 +33,7 @@ export type PaginateFunction = <T, K>(
   model: any,
   args?: K,
   options?: PaginateOptions,
-) => Promise<ApiResponse<T[], PaginationMeta>>;
+) => Promise<PaginatedResult<T>>;
 
 export const paginator = (defaultOptions: PaginateOptions): PaginateFunction => {
   return async (model, args: any = {}, options?: PaginateOptions) => {
@@ -43,16 +55,19 @@ export const paginator = (defaultOptions: PaginateOptions): PaginateFunction => 
     const lastPage = Math.max(1, Math.ceil(total / perPage) || 1);
 
     const meta: PaginationMeta = {
-      total,
-      lastPage,
-      currentPage: page,
-      perPage,
-      prev: page > 1 ? page - 1 : null,
-      next: page < lastPage ? page + 1 : null,
+      pagination: {
+        total,
+        lastPage,
+        currentPage: page,
+        perPage,
+        prev: page > 1 ? page - 1 : null,
+        next: page < lastPage ? page + 1 : null,
+      },
     };
-
-    // 🔥 trả luôn ApiResponseDto ở đây
-    return ApiResponse.ok(data, meta);
+    return {
+      data,
+      meta,
+    };
   };
 };
 

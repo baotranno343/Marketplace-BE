@@ -78,8 +78,8 @@ model Product {
   description        String?
   price              Int?
   discount           Int?
-  CategoryId         Int?
-  Category           Category?            @relation(fields: [CategoryId], references: [id])
+  categoryId         Int?
+  category           Category?            @relation(fields: [categoryId], references: [id])
   stock              Int?
   status             ProductStatus?
   isFeatured         Boolean?
