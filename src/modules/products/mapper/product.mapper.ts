@@ -16,9 +16,6 @@ export function mapCreateProductDtoToPrisma(dto: CreateProductDto): Prisma.Produ
     isFeatured: dto.isFeatured,
     averageRating: dto.averageRating,
     totalReviews: dto.totalReviews,
-    createdAt: dto.createdAt,
-    updatedAt: dto.updatedAt,
-    deletedAt: dto.deletedAt,
     user: { connect: { id: dto.userId } },
   };
 }
@@ -35,9 +32,7 @@ export function mapUpdateProductDtoToPrisma(dto: UpdateProductDto): Prisma.Produ
     isFeatured: dto.isFeatured,
     averageRating: dto.averageRating,
     totalReviews: dto.totalReviews,
-    createdAt: dto.createdAt,
-    updatedAt: dto.updatedAt,
-    deletedAt: dto.deletedAt,
+
     user: { connect: { id: dto.userId } },
   };
 }

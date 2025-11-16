@@ -19,8 +19,10 @@ export class CategoriesService {
     return this.categoriesRepository.create(data);
   }
 
-  findCategories(paginateOptionsDTO: PaginateOptionsDTO): Promise<PaginatedResult<Category>> {
-    return this.categoriesRepository.findAll({
+  findCategoriesPagination(
+    paginateOptionsDTO: PaginateOptionsDTO,
+  ): Promise<PaginatedResult<Category>> {
+    return this.categoriesRepository.findPagination({
       page: paginateOptionsDTO.page,
       perPage: paginateOptionsDTO.perPage,
     });

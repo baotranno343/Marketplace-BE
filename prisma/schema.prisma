@@ -36,18 +36,24 @@ model User {
 }
 
 model Address {
-  id      String  @id @default(uuid()) @db.Uuid
-  address String?
-  user    User?   @relation(fields: [userId], references: [id])
-  userId  String?
+  id        String   @id @default(uuid()) @db.Uuid
+  address   String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
 }
 
 model CartItem {
-  id        String  @id @default(uuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   productId String?
   quantity  String?
-  user      User?   @relation(fields: [userId], references: [id])
-  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
 }
 
 enum EmployeeRole {
@@ -81,7 +87,7 @@ model Product {
   description        String?
   price              Int?
   discount           Int?
-  categoryId         String?
+  categoryId         String?              @db.Uuid
   category           Category?            @relation(fields: [categoryId], references: [id])
   stock              Int?
   status             ProductStatus?
@@ -93,7 +99,7 @@ model Product {
   updatedAt          DateTime             @updatedAt
   deletedAt          DateTime?
   user               User?                @relation(fields: [userId], references: [id])
-  userId             String?
+  userId             String?              @db.Uuid
 }
 
 enum ProductStatus {
@@ -106,7 +112,7 @@ model ProductImage {
   id        Int      @id @default(autoincrement())
   url       String?
   alt       String?
-  productId String
+  productId String   @db.Uuid
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -120,7 +126,7 @@ model RatingDistribution {
   threeStars Int?
   twoStars   Int?
   oneStar    Int?
-  productId  String
+  productId  String   @db.Uuid
   product    Product  @relation(fields: [productId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'generated/prisma';
-import { ApiResponse } from 'src/common/utils/api-response.util';
-import { dataPaginate } from 'src/common/utils/data-paginator.util';
+import { Prisma, User } from 'generated/prisma';
+import { dataPaginate, PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersReposistory {
   constructor(private prisma: PrismaService) {}
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  create(data: Prisma.UserCreateInput) {
+    return this.prisma.user.create({ data });
   }
 
-  findAll({
+  findPagination({
     where,
     orderBy,
     page,
@@ -23,7 +21,7 @@ export class UsersReposistory {
     orderBy?: Prisma.UserOrderByWithRelationInput;
     page?: number;
     perPage?: number;
-  }): Promise<any> {
+  }): Promise<PaginatedResult<User>> {
     return dataPaginate(
       this.prisma.user,
       {
@@ -38,15 +36,17 @@ export class UsersReposistory {
   }
 
   async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
-    return ApiResponse.ok(user);
+    return await this.prisma.user.findUnique({ where: { id } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    return this.prisma.user.delete({ where: { id } });
   }
 }

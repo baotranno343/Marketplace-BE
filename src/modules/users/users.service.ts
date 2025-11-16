@@ -1,27 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { User } from 'generated/prisma';
+import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
+import { PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersReposistory } from './users.repository';
 @Injectable()
 export class UsersService {
   constructor(private usersReposistory: UsersReposistory) {}
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  createUser(createUserDto: CreateUserDto): Promise<User> {
+    return this.usersReposistory.create(createUserDto);
   }
 
-  getUsers(): Promise<any> {
-    return this.usersReposistory.findAll({});
+  getUsersPagination(paginateOptionsDTO: PaginateOptionsDTO): Promise<PaginatedResult<User>> {
+    return this.usersReposistory.findPagination({
+      page: paginateOptionsDTO.page,
+      perPage: paginateOptionsDTO.perPage,
+    });
   }
 
-  findOne(id: string) {
+  findUser(id: string): Promise<User | null> {
     return this.usersReposistory.findOne(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    return this.usersReposistory.update(id, updateUserDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  removeUser(id: string): Promise<User> {
+    return this.usersReposistory.remove(id);
   }
 }

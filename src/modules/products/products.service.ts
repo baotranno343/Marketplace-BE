@@ -18,7 +18,7 @@ export class ProductsService {
   findProductsPagination(
     paginateOptionsDTO: PaginateOptionsDTO,
   ): Promise<PaginatedResult<Product>> {
-    return this.productsRepository.findAll({
+    return this.productsRepository.findPagination({
       page: paginateOptionsDTO.page,
       perPage: paginateOptionsDTO.perPage,
     });

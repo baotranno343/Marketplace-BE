@@ -13,7 +13,7 @@ export class ProductsRepository {
     });
   }
 
-  async findAll({
+  async findPagination({
     where,
     orderBy,
     page,

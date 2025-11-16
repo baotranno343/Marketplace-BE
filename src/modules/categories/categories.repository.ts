@@ -11,7 +11,7 @@ export class CategoriesRepository {
     return this.prismaService.category.create({ data });
   }
 
-  async findAll({
+  async findPagination({
     where,
     orderBy,
     page,

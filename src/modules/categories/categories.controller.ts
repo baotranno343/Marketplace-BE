@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { Category } from 'generated/prisma';
 import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
@@ -27,27 +17,30 @@ export class CategoriesController {
 
   @Get()
   findCategoriesPagination(@Query() query: PaginateOptionsDTO): Promise<PaginatedResult<Category>> {
-    return this.categoriesService.findCategories({ page: query.page, perPage: query.perPage });
+    return this.categoriesService.findCategoriesPagination({
+      page: query.page,
+      perPage: query.perPage,
+    });
   }
 
   @Get(':id')
-  findCategory(@Param('id', ParseIntPipe) id: string): Promise<Category | null> {
+  findCategory(@Param('id') id: string): Promise<Category | null> {
     return this.categoriesService.findCategory(id);
   }
 
   @Patch(':id')
   updateCategory(
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ): Promise<Category> {
     return this.categoriesService.updateCategory(id, updateCategoryDto);
   }
   @Delete(':id')
-  softDeleteCategory(@Param('id', ParseIntPipe) id: string): Promise<Category> {
+  softDeleteCategory(@Param('id') id: string): Promise<Category> {
     return this.categoriesService.softDeleteCategory(id);
   }
   @Delete(':id/hard')
-  removeCategory(@Param('id', ParseIntPipe) id: string): Promise<Category> {
+  removeCategory(@Param('id') id: string): Promise<Category> {
     return this.categoriesService.removeCategory(id);
   }
 }

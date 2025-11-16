@@ -1,35 +1,42 @@
-import { IsBoolean, IsDate, IsEnum, IsNumber, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsEnum, IsNumber, IsString } from 'class-validator';
 import { ProductStatus } from 'generated/prisma';
 
 export class CreateProductDto {
+  @ApiProperty({ required: false })
   @IsString()
   name: string;
+  @ApiProperty({ required: false })
   @IsString()
   slug: string;
+  @ApiProperty({ required: false })
   @IsString()
   description: string;
+  @ApiProperty({ required: false })
   @IsNumber()
   price: number;
+  @ApiProperty({ required: false })
   @IsNumber()
   discount: number;
-  @IsNumber()
+  @ApiProperty({ required: false })
+  @IsString()
   CategoryId: string;
+  @ApiProperty({ required: false })
   @IsNumber()
   stock: number;
+  @ApiProperty({ required: false })
   @IsEnum(ProductStatus)
   status: ProductStatus;
+  @ApiProperty({ required: false })
   @IsBoolean()
   isFeatured: boolean;
+  @ApiProperty({ required: false })
   @IsNumber()
   averageRating: number;
+  @ApiProperty({ required: false })
+  @IsString()
+  userId: string;
+  @ApiProperty({ required: false })
   @IsNumber()
   totalReviews: number;
-  @IsDate()
-  createdAt: Date;
-  @IsDate()
-  updatedAt: Date;
-  @IsDate()
-  deletedAt: Date;
-  @IsNumber()
-  userId: string;
 }
