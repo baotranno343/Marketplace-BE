@@ -8,7 +8,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersReposistory {
   constructor(private prisma: PrismaService) {}
   create(data: Prisma.UserCreateInput) {
-    return this.prisma.user.create({ data });
+    return this.prisma.user.create({ data, omit: { password: true } });
   }
 
   findPagination({
@@ -27,6 +27,7 @@ export class UsersReposistory {
       {
         where,
         orderBy,
+        omit: { password: true },
       },
       {
         page,
@@ -36,19 +37,24 @@ export class UsersReposistory {
   }
 
   async findOne(id: string) {
-    return await this.prisma.user.findUnique({ where: { id } });
+    return await this.prisma.user.findUnique({ where: { id }, omit: { password: true } });
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
+      omit: { password: true },
     });
   }
   softDelete(id: string) {
-    return this.prisma.user.update({ where: { id }, data: { deletedAt: new Date() } });
+    return this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+      omit: { password: true },
+    });
   }
   remove(id: string) {
-    return this.prisma.user.delete({ where: { id } });
+    return this.prisma.user.delete({ where: { id }, omit: { password: true } });
   }
 }

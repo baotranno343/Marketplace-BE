@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export function mapCreateUserDtoToPrisma(dto: CreateUserDto): Prisma.UserCreateInput {
   return {
     email: dto.email,
+    password: dto.password,
     firstName: dto.firstName,
     lastName: dto.lastName,
     phone: dto.phone,
@@ -17,6 +18,7 @@ export function mapCreateUserDtoToPrisma(dto: CreateUserDto): Prisma.UserCreateI
 export function mapUpdateUserDtoToPrisma(dto: UpdateUserDto): Prisma.UserUpdateInput {
   return {
     email: dto.email,
+    password: dto.password,
     firstName: dto.firstName,
     lastName: dto.lastName,
     phone: dto.phone,

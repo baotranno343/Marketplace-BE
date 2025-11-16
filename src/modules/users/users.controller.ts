@@ -21,7 +21,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
     return this.usersService.createUser(createUserDto);
   }
 
@@ -34,7 +34,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findUser(@Param('id', ParseUUIDPipe) id: string): Promise<User | null> {
+  findUser(@Param('id', ParseUUIDPipe) id: string): Promise<Omit<User, 'password'> | null> {
     return this.usersService.findUser(id);
   }
 
@@ -42,15 +42,15 @@ export class UsersController {
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<Omit<User, 'password'>> {
     return this.usersService.updateUser(id, updateUserDto);
   }
   @Delete(':id')
-  softDeleteUser(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+  softDeleteUser(@Param('id', ParseUUIDPipe) id: string): Promise<Omit<User, 'password'>> {
     return this.usersService.softDeleteUser(id);
   }
   @Delete(':id/hard')
-  removeUser(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+  removeUser(@Param('id', ParseUUIDPipe) id: string): Promise<Omit<User, 'password'>> {
     return this.usersService.removeUser(id);
   }
 }

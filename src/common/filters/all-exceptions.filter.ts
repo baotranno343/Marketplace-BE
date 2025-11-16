@@ -80,6 +80,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // }
     // 3) (tuỳ chọn) Nếu muốn xử lý riêng Prisma error
     else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log(exception);
       status = HttpStatus.BAD_REQUEST;
       // body = {
       //   success: false,

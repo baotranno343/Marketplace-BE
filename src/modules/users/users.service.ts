@@ -8,7 +8,7 @@ import { UsersReposistory } from './users.repository';
 @Injectable()
 export class UsersService {
   constructor(private usersReposistory: UsersReposistory) {}
-  createUser(createUserDto: CreateUserDto): Promise<User> {
+  createUser(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
     return this.usersReposistory.create(createUserDto);
   }
 
@@ -19,17 +19,17 @@ export class UsersService {
     });
   }
 
-  findUser(id: string): Promise<User | null> {
+  findUser(id: string): Promise<Omit<User, 'password'> | null> {
     return this.usersReposistory.findOne(id);
   }
 
-  updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  updateUser(id: string, updateUserDto: UpdateUserDto): Promise<Omit<User, 'password'>> {
     return this.usersReposistory.update(id, updateUserDto);
   }
-  softDeleteUser(id: string): Promise<User> {
+  softDeleteUser(id: string): Promise<Omit<User, 'password'>> {
     return this.usersReposistory.softDelete(id);
   }
-  removeUser(id: string): Promise<User> {
+  removeUser(id: string): Promise<Omit<User, 'password'>> {
     return this.usersReposistory.remove(id);
   }
 }
