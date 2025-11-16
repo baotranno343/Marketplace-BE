@@ -21,12 +21,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
   }
 
   @Get()
-  findAll(@Query() query: PaginateOptionsDTO): Promise<PaginatedResult<User>> {
+  findUsersPagination(@Query() query: PaginateOptionsDTO): Promise<PaginatedResult<User>> {
     return this.usersService.getUsersPagination({
       page: query.page,
       perPage: query.perPage,
@@ -34,20 +34,23 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User | null> {
+  findUser(@Param('id', ParseUUIDPipe) id: string): Promise<User | null> {
     return this.usersService.findUser(id);
   }
 
   @Patch(':id')
-  update(
+  updateUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.updateUser(id, updateUserDto);
   }
-
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+  softDeleteUser(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+    return this.usersService.softDeleteUser(id);
+  }
+  @Delete(':id/hard')
+  removeUser(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
     return this.usersService.removeUser(id);
   }
 }

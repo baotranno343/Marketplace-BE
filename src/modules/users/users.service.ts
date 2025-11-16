@@ -26,7 +26,9 @@ export class UsersService {
   updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return this.usersReposistory.update(id, updateUserDto);
   }
-
+  softDeleteUser(id: string): Promise<User> {
+    return this.usersReposistory.softDelete(id);
+  }
   removeUser(id: string): Promise<User> {
     return this.usersReposistory.remove(id);
   }

@@ -45,7 +45,9 @@ export class UsersReposistory {
       data: updateUserDto,
     });
   }
-
+  softDelete(id: string) {
+    return this.prisma.user.update({ where: { id }, data: { deletedAt: new Date() } });
+  }
   remove(id: string) {
     return this.prisma.user.delete({ where: { id } });
   }
