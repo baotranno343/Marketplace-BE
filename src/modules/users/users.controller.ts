@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { User } from 'generated/prisma';
 import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
@@ -24,17 +34,20 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User | null> {
+  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User | null> {
     return this.usersService.findUser(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<User> {
+  remove(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
     return this.usersService.removeUser(id);
   }
 }

@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { PaginateOptionsDTO } from '../../common/dto/paginate-options.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -22,20 +32,23 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findProduct(@Param('id') id: string) {
+  findProduct(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.findProduct(id);
   }
 
   @Patch(':id')
-  updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+  updateProduct(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
     return this.productsService.updateProduct(id, updateProductDto);
   }
   @Delete(':id')
-  softDeleteProduct(@Param('id') id: string) {
+  softDeleteProduct(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.softDeleteProduct(id);
   }
   @Delete(':id/hard')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.removeProduct(id);
   }
 }

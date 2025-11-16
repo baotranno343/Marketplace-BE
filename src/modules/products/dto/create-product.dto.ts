@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
 import { ProductStatus } from 'generated/prisma';
 
 export class CreateProductDto {
@@ -19,7 +19,7 @@ export class CreateProductDto {
   @IsNumber()
   discount: number;
   @ApiProperty({ required: false })
-  @IsString()
+  @IsUUID()
   CategoryId: string;
   @ApiProperty({ required: false })
   @IsNumber()
