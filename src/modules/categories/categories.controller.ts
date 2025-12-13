@@ -9,7 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Category } from 'generated/prisma';
+import { Category } from 'generated/prisma/client';
 import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { CategoriesService } from './categories.service';

@@ -1,5 +1,5 @@
 // user.mapper.ts
-import { Prisma } from 'generated/prisma';
+import { Prisma } from 'generated/prisma/client';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 

@@ -1,61 +1,80 @@
-/*
-  Warnings:
+-- CreateEnum
+CREATE TYPE "EmployeeRole" AS ENUM ('CALL_CENTER', 'PACKER', 'WARE_HOUSE', 'DELIVERY_MAN', 'INCHARGE', 'ACCOUNTS');
 
-  - Made the column `createdAt` on table `User` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `updatedAt` on table `User` required. This step will fail if there are existing NULL values in that column.
-
-*/
 -- CreateEnum
 CREATE TYPE "ProductStatus" AS ENUM ('NEW', 'HOT', 'SALE');
 
--- AlterTable
-ALTER TABLE "User" ADD COLUMN     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
-ADD COLUMN     "walletBalance" INTEGER,
-ALTER COLUMN "createdAt" SET NOT NULL,
-ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP,
-ALTER COLUMN "updatedAt" SET NOT NULL;
+-- CreateTable
+CREATE TABLE "User" (
+    "id" UUID NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT,
+    "firstName" TEXT,
+    "lastName" TEXT,
+    "phone" TEXT,
+    "dateOfBirth" TIMESTAMP(3),
+    "profileImage" TEXT,
+    "walletBalance" INTEGER,
+    "isAdmin" BOOLEAN,
+    "isEmployee" BOOLEAN,
+    "employeeRole" "EmployeeRole",
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Address" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "address" TEXT,
-    "userId" INTEGER,
+    "userId" UUID,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "CartItem" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "productId" TEXT,
     "quantity" TEXT,
-    "userId" INTEGER,
+    "userId" UUID,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "CartItem_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Category" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "title" TEXT,
     "slug" TEXT,
     "description" TEXT,
     "range" INTEGER,
     "featured" BOOLEAN,
     "imageUrl" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Product" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT,
     "slug" TEXT,
     "description" TEXT,
     "price" INTEGER,
     "discount" INTEGER,
-    "CategoryId" INTEGER,
+    "categoryId" UUID,
     "stock" INTEGER,
     "status" "ProductStatus",
     "isFeatured" BOOLEAN,
@@ -63,8 +82,8 @@ CREATE TABLE "Product" (
     "totalReviews" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
-    "userId" INTEGER,
+    "deletedAt" TIMESTAMP(3),
+    "userId" UUID,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
@@ -74,10 +93,10 @@ CREATE TABLE "ProductImage" (
     "id" SERIAL NOT NULL,
     "url" TEXT,
     "alt" TEXT,
-    "productId" INTEGER NOT NULL,
+    "productId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "ProductImage_pkey" PRIMARY KEY ("id")
 );
@@ -90,13 +109,16 @@ CREATE TABLE "RatingDistribution" (
     "threeStars" INTEGER,
     "twoStars" INTEGER,
     "oneStar" INTEGER,
-    "productId" INTEGER NOT NULL,
+    "productId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "RatingDistribution_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
 ALTER TABLE "Address" ADD CONSTRAINT "Address_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -105,7 +127,7 @@ ALTER TABLE "Address" ADD CONSTRAINT "Address_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_CategoryId_fkey" FOREIGN KEY ("CategoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
