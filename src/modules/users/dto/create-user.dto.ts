@@ -1,29 +1,33 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
-  @ApiProperty({ required: false })
   @IsString()
   email: string;
-  @ApiProperty({ required: false })
+
+  @IsOptional()
   @IsString()
-  password: string;
-  @ApiProperty({ required: false })
+  password?: string | null;
+
+  @IsOptional()
   @IsString()
-  firstName: string;
-  @ApiProperty({ required: false })
+  firstName?: string | null;
+
+  @IsOptional()
   @IsString()
-  lastName: string;
-  @ApiProperty({ required: false })
+  lastName?: string | null;
+
+  @IsOptional()
   @IsString()
-  phone: string;
-  @ApiProperty({ required: false })
+  phone?: string | null;
+
+  @IsOptional()
   @IsDateString()
-  dateOfBirth: Date;
-  @ApiProperty({ required: false })
+  dateOfBirth?: string | null;
+
+  @IsOptional()
   @IsString()
-  profileImage: string;
-  @ApiProperty({ required: false })
-  @IsNumber()
-  walletBalance: number;
+  profileImage?: string | null;
+
+  @IsOptional()
+  walletBalance?: number | null;
 }

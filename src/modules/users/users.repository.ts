@@ -36,8 +36,8 @@ export class UsersReposistory {
     );
   }
 
-  async findOne(id: string) {
-    return await this.prisma.user.findUnique({ where: { id }, omit: { password: true } });
+  async findOne(userId: string) {
+    return await this.prisma.user.findUnique({ where: { id: userId }, omit: { password: true } });
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {

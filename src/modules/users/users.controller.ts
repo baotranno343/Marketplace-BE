@@ -33,9 +33,9 @@ export class UsersController {
     });
   }
 
-  @Get(':id')
-  findUser(@Param('id', ParseUUIDPipe) id: string): Promise<Omit<User, 'password'> | null> {
-    return this.usersService.findUser(id);
+  @Get(':userId')
+  findUser(@Param('userId') userId: string): Promise<Omit<User, 'password'> | null> {
+    return this.usersService.findUser(userId);
   }
 
   @Patch(':id')
