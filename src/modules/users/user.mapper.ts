@@ -1,5 +1,5 @@
 // user.mapper.ts
-import { Prisma } from 'generated/prisma';
+import { Prisma } from 'generated/prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 

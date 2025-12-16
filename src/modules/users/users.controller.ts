@@ -9,7 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { User } from 'generated/prisma';
+import { User } from 'generated/prisma/client';
 import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { CreateUserDto } from './dto/create-user.dto';
