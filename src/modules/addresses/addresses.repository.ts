@@ -43,10 +43,10 @@ export class AddressesRepository {
 
   // helper to get addresses by user
   findByUserId(userId: string) {
-    // return this.prismaService.address.findMany({
-    //   where: { userId, deletedAt: null },
-    //   orderBy: { createdAt: 'desc' },
-    // });
-    return this.prismaService.address.findMany({});
+    console.log(userId);
+    return this.prismaService.address.findMany({
+      where: { userId, deletedAt: null },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 }

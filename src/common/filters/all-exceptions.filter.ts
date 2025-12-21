@@ -1,7 +1,7 @@
 // src/common/filters/all-exceptions.filter.ts
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Prisma } from 'generated/prisma/client';
+import { Prisma } from 'generated/prisma';
 import { ApiResponse } from '../utils/api-response.util';
 // (tuỳ chọn) nếu dùng Zod hoặc Prisma thì import thêm:
 // import { ZodError } from 'zod';

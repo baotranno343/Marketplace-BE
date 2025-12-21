@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Category, Prisma } from 'generated/prisma/client';
+import { Category, Prisma } from 'generated/prisma';
 import { dataPaginate, PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 

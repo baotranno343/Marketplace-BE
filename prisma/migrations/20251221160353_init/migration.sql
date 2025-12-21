@@ -1,4 +1,10 @@
 -- CreateEnum
+CREATE TYPE "NotificationType" AS ENUM ('promo', 'order', 'system', 'marketing', 'general');
+
+-- CreateEnum
+CREATE TYPE "NotificationPriority" AS ENUM ('low', 'medium', 'high', 'urgent');
+
+-- CreateEnum
 CREATE TYPE "EmployeeRole" AS ENUM ('CALL_CENTER', 'PACKER', 'WARE_HOUSE', 'DELIVERY_MAN', 'INCHARGE', 'ACCOUNTS');
 
 -- CreateEnum
@@ -23,6 +29,63 @@ CREATE TABLE "User" (
     "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Order" (
+    "id" UUID NOT NULL,
+    "orderNumber" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
+    "customerName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'pending',
+    "paymentMethod" TEXT NOT NULL,
+    "paymentStatus" TEXT NOT NULL,
+    "totalPrice" INTEGER NOT NULL,
+    "subtotal" INTEGER,
+    "shipping" INTEGER,
+    "tax" INTEGER,
+    "addressName" TEXT,
+    "address" TEXT,
+    "city" TEXT,
+    "state" TEXT,
+    "zip" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+
+    CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "OrderProduct" (
+    "id" UUID NOT NULL,
+    "orderId" UUID NOT NULL,
+    "productId" UUID NOT NULL,
+    "quantity" INTEGER NOT NULL,
+
+    CONSTRAINT "OrderProduct_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Notification" (
+    "id" UUID NOT NULL,
+    "title" TEXT,
+    "message" TEXT,
+    "type" "NotificationType",
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "priority" "NotificationPriority",
+    "sentAt" TIMESTAMP(3),
+    "readAt" TIMESTAMP(3),
+    "sentBy" TEXT,
+    "actionUrl" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+    "userId" UUID NOT NULL,
+
+    CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -119,6 +182,18 @@ CREATE TABLE "RatingDistribution" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Order_orderNumber_key" ON "Order"("orderNumber");
+
+-- AddForeignKey
+ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "OrderProduct" ADD CONSTRAINT "OrderProduct_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Address" ADD CONSTRAINT "Address_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

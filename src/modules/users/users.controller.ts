@@ -9,16 +9,20 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { User } from 'generated/prisma/client';
+import { User } from 'generated/prisma';
 import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
+import { AddressesService } from '../addresses/addresses.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly addressesService: AddressesService,
+  ) {}
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {

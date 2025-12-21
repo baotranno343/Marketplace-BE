@@ -1,5 +1,5 @@
 {
-  "name": "TMDT_T_K",
+  "name": "ShopE",
   "version": "0.0.1",
   "private": true,
   "description": "",
@@ -7,6 +7,7 @@
   "author": "",
   "scripts": {
     "build": "npm run format && npm run lint && nest build",
+    "db:seed": "prisma db seed",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepare": "husky",
@@ -44,14 +45,16 @@
     }
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.1",
-    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from 'generated/prisma/client';
+import { Product } from 'generated/prisma';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { PaginateOptionsDTO } from '../../common/dto/paginate-options.dto';
 import { CreateProductDto } from './dto/create-product.dto';

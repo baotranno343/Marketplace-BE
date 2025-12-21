@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from 'generated/prisma/client';
+import { Prisma, User } from 'generated/prisma';
 import { dataPaginate, PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';

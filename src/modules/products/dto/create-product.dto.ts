@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
-import { ProductStatus } from 'generated/prisma/client';
+import { ProductStatus } from 'generated/prisma';
 
 export class CreateProductDto {
   @ApiProperty({ required: false })

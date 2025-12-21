@@ -11,7 +11,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { CurrentUser } from 'src/common/utils/current-user.util';
 import { PaginateOptionsDTO } from '../../common/dto/paginate-options.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AddressesService } from './addresses.service';
@@ -35,12 +34,6 @@ export class AddressesController {
       page: query.page,
       perPage: query.perPage,
     });
-  }
-
-  @Get('/me')
-  findByUser(@CurrentUser() user: any) {
-    console.log(user);
-    return this.addressesService.getAddressesByUser('');
   }
 
   @Get(':id')
