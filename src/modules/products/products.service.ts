@@ -19,7 +19,7 @@ export class ProductsService {
 
     const where: Prisma.ProductWhereInput = {};
     if (category) where.category = { slug: category };
-    if (variant) where.status = variant as any;
+    if (variant) where.status = variant;
 
     const finalWhere = Object.keys(where).length ? where : undefined;
 
@@ -29,7 +29,7 @@ export class ProductsService {
     return this.productsRepository.findPagination({
       page,
       perPage,
-      where,
+      where: finalWhere,
       orderBy: {
         [sortField]: order,
       },
