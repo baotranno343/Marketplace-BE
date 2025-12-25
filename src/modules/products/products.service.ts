@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from 'generated/prisma';
+import { Prisma, Product } from 'generated/prisma';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
-import { PaginateOptionsDTO } from '../../common/dto/paginate-options.dto';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FindProductsQueryDTO } from './dto/find-products.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { mapCreateProductDtoToPrisma, mapUpdateProductDtoToPrisma } from './mapper/product.mapper';
 import { ProductsRepository } from './products.repository';
@@ -14,13 +14,30 @@ export class ProductsService {
     const data = mapCreateProductDtoToPrisma(createProductDto);
     return await this.productsRepository.create(data);
   }
+  findProductsPagination(query: FindProductsQueryDTO): Promise<PaginatedResult<Product>> {
+    const { page, perPage, category, variant, sort = 'name', order = 'asc' } = query;
 
-  findProductsPagination(
-    paginateOptionsDTO: PaginateOptionsDTO,
-  ): Promise<PaginatedResult<Product>> {
+    const where: Prisma.ProductWhereInput = {};
+    if (category) where.category = { slug: category };
+    if (variant) where.status = variant as any;
+
+    const finalWhere = Object.keys(where).length ? where : undefined;
+
+    const allowedSortFields = ['name', 'price', 'createdAt', 'updatedAt'];
+    const sortField = allowedSortFields.includes(sort) ? sort : 'name';
+
     return this.productsRepository.findPagination({
-      page: paginateOptionsDTO.page,
-      perPage: paginateOptionsDTO.perPage,
+      page,
+      perPage,
+      where,
+      orderBy: {
+        [sortField]: order,
+      },
+      include: {
+        category: true,
+        images: true,
+        ratingDistribution: true,
+      },
     });
   }
 

@@ -9,8 +9,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PaginateOptionsDTO } from '../../common/dto/paginate-options.dto';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FindProductsQueryDTO } from './dto/find-products.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
 
@@ -24,11 +24,8 @@ export class ProductsController {
   }
 
   @Get()
-  findProductsPagination(@Query() query: PaginateOptionsDTO) {
-    return this.productsService.findProductsPagination({
-      page: query.page,
-      perPage: query.perPage,
-    });
+  findProductsPagination(@Query() query: FindProductsQueryDTO) {
+    return this.productsService.findProductsPagination(query);
   }
 
   @Get(':id')

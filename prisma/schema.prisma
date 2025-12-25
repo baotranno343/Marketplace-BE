@@ -184,6 +184,10 @@ enum ProductStatus {
   NEW
   HOT
   SALE
+  FEATURED
+  OUT_OF_STOCK
+  DISCONTINUED
+  PREORDER
 }
 
 model ProductImage {
