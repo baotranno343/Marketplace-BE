@@ -147,6 +147,21 @@ async function main() {
   );
 
   /* =======================
+     BRANDS
+  ======================= */
+  const brands = await Promise.all(
+    ['Nike', 'Adidas', 'Apple', 'Samsung', 'Sony'].map((name) =>
+      prisma.brand.create({
+        data: {
+          name,
+          slug: name.toLowerCase(),
+          imageUrl: faker.image.urlLoremFlickr({ category: 'logo' }),
+        },
+      }),
+    ),
+  );
+
+  /* =======================
      PRODUCT
   ======================= */
   console.log('🌱 Seeding products');
@@ -158,6 +173,7 @@ async function main() {
       data: {
         name: faker.commerce.productName(),
         slug: faker.helpers.slugify(faker.commerce.productName()).toLowerCase(),
+        brandId: faker.helpers.arrayElement(brands).id,
         description: faker.commerce.productDescription(),
         price: faker.number.int({ min: 200_000, max: 6_000_000 }),
         discount: faker.number.int({ min: 0, max: 40 }),

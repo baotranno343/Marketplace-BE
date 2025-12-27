@@ -35,6 +35,7 @@ export class ProductsService {
       },
       include: {
         category: true,
+        brand: true,
         images: true,
         ratingDistribution: true,
       },

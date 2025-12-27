@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AddressesModule } from './modules/addresses/addresses.module';
+import { BrandsModule } from './modules/brands/brands.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { OrdersModule } from './modules/orders/orders.module';
@@ -19,6 +20,7 @@ import { UsersModule } from './modules/users/users.module';
     NotificationsModule,
     AddressesModule,
     OrdersModule,
+    BrandsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

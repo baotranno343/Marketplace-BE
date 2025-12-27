@@ -37,6 +37,9 @@ export class CreateProductDto {
   @IsString()
   userId: string;
   @ApiProperty({ required: false })
+  @IsString()
+  brandId: string;
+  @ApiProperty({ required: false })
   @IsNumber()
   totalReviews: number;
 }
