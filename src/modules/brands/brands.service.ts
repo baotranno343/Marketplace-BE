@@ -1,52 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { BrandsRepository } from './brands.repository';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 
 @Injectable()
 export class BrandsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly brandsRepo: BrandsRepository) {}
 
-  async create(dto: CreateBrandDto) {
-    return this.prisma.brand.create({
-      data: dto,
+  create(dto: CreateBrandDto) {
+    return this.brandsRepo.create({
+      name: dto.name,
+      slug: dto.slug,
+      imageUrl: dto.imageUrl,
     });
   }
 
-  async findAll() {
-    return this.prisma.brand.findMany({
-      where: { deletedAt: null },
-      orderBy: { createdAt: 'desc' },
-    });
+  findAll() {
+    return this.brandsRepo.findAll();
   }
 
   async findOne(id: string) {
-    const brand = await this.prisma.brand.findFirst({
-      where: { id, deletedAt: null },
-    });
-
+    const brand = await this.brandsRepo.findById(id);
     if (!brand) {
       throw new NotFoundException('Brand not found');
     }
-
     return brand;
   }
 
   async update(id: string, dto: UpdateBrandDto) {
     await this.findOne(id);
 
-    return this.prisma.brand.update({
-      where: { id },
-      data: dto,
+    return this.brandsRepo.update(id, {
+      name: dto.name,
+      slug: dto.slug,
+      imageUrl: dto.imageUrl,
     });
   }
 
   async remove(id: string) {
     await this.findOne(id);
-
-    return this.prisma.brand.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-    });
+    return this.brandsRepo.softDelete(id);
   }
 }

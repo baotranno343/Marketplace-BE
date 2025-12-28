@@ -21,4 +21,5 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
 prisma/seed.ts
