@@ -30,10 +30,7 @@ export class AddressesController {
 
   @Get()
   findAddressesPagination(@Query() query: PaginateOptionsDTO) {
-    return this.addressesService.findAddressesPagination({
-      page: query.page,
-      perPage: query.perPage,
-    });
+    return this.addressesService.findAddressesPagination(query);
   }
 
   @Get(':id')

@@ -5,7 +5,7 @@ import { Notification } from './../../../generated/prisma';
 import { PrismaService } from './../prisma/prisma.service';
 
 @Injectable()
-export class NotificationssRepository {
+export class NotificationsRepository {
   constructor(private prismaService: PrismaService) {}
   create(data: Prisma.NotificationCreateInput): Promise<Notification> {
     return this.prismaService.notification.create({
@@ -19,8 +19,8 @@ export class NotificationssRepository {
     page,
     perPage,
   }: {
-    where?: Prisma.ProductWhereInput;
-    orderBy?: Prisma.ProductOrderByWithRelationInput;
+    where?: Prisma.NotificationWhereInput;
+    orderBy?: Prisma.NotificationOrderByWithRelationInput;
     page?: number | string | undefined;
     perPage?: number | string | undefined;
   }): Promise<PaginatedResult<Notification>> {

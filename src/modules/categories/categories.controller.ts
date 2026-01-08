@@ -27,10 +27,7 @@ export class CategoriesController {
 
   @Get()
   findCategoriesPagination(@Query() query: PaginateOptionsDTO): Promise<PaginatedResult<Category>> {
-    return this.categoriesService.findCategoriesPagination({
-      page: query.page,
-      perPage: query.perPage,
-    });
+    return this.categoriesService.findCategoriesPagination(query);
   }
 
   @Get(':id')

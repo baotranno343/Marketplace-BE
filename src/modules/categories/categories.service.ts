@@ -22,9 +22,10 @@ export class CategoriesService {
   findCategoriesPagination(
     paginateOptionsDTO: PaginateOptionsDTO,
   ): Promise<PaginatedResult<Category>> {
+    const { page, perPage } = paginateOptionsDTO;
     return this.categoriesRepository.findPagination({
-      page: paginateOptionsDTO.page,
-      perPage: paginateOptionsDTO.perPage,
+      page,
+      perPage,
     });
   }
 
@@ -32,14 +33,14 @@ export class CategoriesService {
     return this.categoriesRepository.findOne(id);
   }
 
-  async updateCategory(id: string, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+  updateCategory(id: string, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
     const data = mapUpdateCategoryDtoToPrisma(updateCategoryDto);
     return this.categoriesRepository.update(id, data);
   }
-  async softDeleteCategory(id: string): Promise<Category> {
-    return await this.categoriesRepository.softDelete(id);
+  softDeleteCategory(id: string): Promise<Category> {
+    return this.categoriesRepository.softDelete(id);
   }
-  async removeCategory(id: string): Promise<Category> {
-    return await this.categoriesRepository.remove(id);
+  removeCategory(id: string): Promise<Category> {
+    return this.categoriesRepository.remove(id);
   }
 }

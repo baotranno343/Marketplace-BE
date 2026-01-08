@@ -12,7 +12,6 @@ export class AddressesService {
   constructor(private addressesRepository: AddressesRepository) {}
 
   createAddress(createAddressDto: CreateAddressDto): Promise<Address> {
-    console.log('Creating address with DTO:', createAddressDto);
     const data = mapCreateAddressDtoToPrisma(createAddressDto);
     return this.addressesRepository.create(data);
   }
@@ -20,9 +19,10 @@ export class AddressesService {
   findAddressesPagination(
     paginateOptionsDTO: PaginateOptionsDTO,
   ): Promise<PaginatedResult<Address>> {
+    const { page, perPage } = paginateOptionsDTO;
     return this.addressesRepository.findPagination({
-      page: paginateOptionsDTO.page,
-      perPage: paginateOptionsDTO.perPage,
+      page,
+      perPage,
     });
   }
 

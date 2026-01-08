@@ -31,10 +31,7 @@ export class UsersController {
 
   @Get()
   findUsersPagination(@Query() query: PaginateOptionsDTO): Promise<PaginatedResult<User>> {
-    return this.usersService.getUsersPagination({
-      page: query.page,
-      perPage: query.perPage,
-    });
+    return this.usersService.findUsersPagination(query);
   }
 
   @Get(':userId')

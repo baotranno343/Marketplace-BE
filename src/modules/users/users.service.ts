@@ -4,32 +4,30 @@ import { PaginateOptionsDTO } from 'src/common/dto/paginate-options.dto';
 import { PaginatedResult } from 'src/common/utils/data-paginator.util';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersReposistory } from './users.repository';
+import { UsersRepository } from './users.repository';
 @Injectable()
 export class UsersService {
-  constructor(private usersReposistory: UsersReposistory) {}
+  constructor(private usersRepository: UsersRepository) {}
   createUser(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
-    return this.usersReposistory.create(createUserDto);
+    return this.usersRepository.create(createUserDto);
   }
 
-  getUsersPagination(paginateOptionsDTO: PaginateOptionsDTO): Promise<PaginatedResult<User>> {
-    return this.usersReposistory.findPagination({
-      page: paginateOptionsDTO.page,
-      perPage: paginateOptionsDTO.perPage,
-    });
+  findUsersPagination(paginateOptionsDTO: PaginateOptionsDTO): Promise<PaginatedResult<User>> {
+    const { page, perPage } = paginateOptionsDTO;
+    return this.usersRepository.findPagination({ page, perPage });
   }
 
   findUser(id: string): Promise<Omit<User, 'password'> | null> {
-    return this.usersReposistory.findOne(id);
+    return this.usersRepository.findOne(id);
   }
 
   updateUser(id: string, updateUserDto: UpdateUserDto): Promise<Omit<User, 'password'>> {
-    return this.usersReposistory.update(id, updateUserDto);
+    return this.usersRepository.update(id, updateUserDto);
   }
   softDeleteUser(id: string): Promise<Omit<User, 'password'>> {
-    return this.usersReposistory.softDelete(id);
+    return this.usersRepository.softDelete(id);
   }
   removeUser(id: string): Promise<Omit<User, 'password'>> {
-    return this.usersReposistory.remove(id);
+    return this.usersRepository.remove(id);
   }
 }

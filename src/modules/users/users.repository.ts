@@ -5,7 +5,7 @@ import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UsersReposistory {
+export class UsersRepository {
   constructor(private prisma: PrismaService) {}
   create(data: Prisma.UserCreateInput) {
     return this.prisma.user.create({ data, omit: { password: true } });
@@ -36,8 +36,8 @@ export class UsersReposistory {
     );
   }
 
-  async findOne(userId: string) {
-    return await this.prisma.user.findUnique({ where: { id: userId }, omit: { password: true } });
+  findOne(userId: string) {
+    return this.prisma.user.findUnique({ where: { id: userId }, omit: { password: true } });
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {

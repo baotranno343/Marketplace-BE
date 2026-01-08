@@ -12,18 +12,39 @@ export class ProductsService {
   constructor(private productsRepository: ProductsRepository) {}
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
     const data = mapCreateProductDtoToPrisma(createProductDto);
-    return await this.productsRepository.create(data);
+    return this.productsRepository.create(data);
   }
+
   findProductsPagination(query: FindProductsQueryDTO): Promise<PaginatedResult<Product>> {
-    const { page, perPage, category, variant, sort = 'name', order = 'asc' } = query;
+    const {
+      page,
+      perPage,
+      category,
+      variant,
+      sort = 'name',
+      order = 'asc',
+      brand,
+      maxPrice,
+      minPrice,
+    } = query;
 
     const where: Prisma.ProductWhereInput = {};
+
     if (category) where.category = { slug: category };
     if (variant) where.status = variant;
+    if (brand) {
+      where.brand = { slug: brand };
+    }
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      where.price = {
+        gte: minPrice ?? undefined,
+        lte: maxPrice ?? undefined,
+      };
+    }
 
     const finalWhere = Object.keys(where).length ? where : undefined;
 
-    const allowedSortFields = ['name', 'price', 'createdAt', 'updatedAt'];
+    const allowedSortFields: Array<keyof Product> = ['name', 'price', 'createdAt', 'updatedAt'];
     const sortField = allowedSortFields.includes(sort) ? sort : 'name';
 
     return this.productsRepository.findPagination({
@@ -48,12 +69,12 @@ export class ProductsService {
 
   async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
     const data = mapUpdateProductDtoToPrisma(updateProductDto);
-    return await this.productsRepository.update(id, data);
+    return this.productsRepository.update(id, data);
   }
   async softDeleteProduct(id: string): Promise<Product> {
-    return await this.productsRepository.softDelete(id);
+    return this.productsRepository.softDelete(id);
   }
   async removeProduct(id: string): Promise<Product> {
-    return await this.productsRepository.remove(id);
+    return this.productsRepository.remove(id);
   }
 }
